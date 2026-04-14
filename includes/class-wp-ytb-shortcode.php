@@ -47,7 +47,9 @@ class WP_YTB_Shortcode {
         }
 
         // Fetch settings for inline CSS & visibility
-        $gap           = esc_attr( get_option('wp_ytb_gap', '24') );
+        $gap_desk      = esc_attr( get_option('wp_ytb_gap_desktop', '24') );
+        $gap_tab       = esc_attr( get_option('wp_ytb_gap_tablet', '20') );
+        $gap_mob       = esc_attr( get_option('wp_ytb_gap_mobile', '15') );
         $radius        = esc_attr( get_option('wp_ytb_border_radius', '12') );
         $title_size    = esc_attr( get_option('wp_ytb_title_size', '16') );
         $title_weight  = esc_attr( get_option('wp_ytb_title_weight', '600') );
@@ -73,8 +75,10 @@ class WP_YTB_Shortcode {
         if ( $enable_hover ) {
             $container_classes .= ' wp-ytb-hover-enabled';
         }
+
+        $grid_classes = 'wp-ytb-grid';
         if ( ! empty( $custom_class ) ) {
-            $container_classes .= ' ' . $custom_class;
+            $grid_classes .= ' ' . $custom_class;
         }
 
         // Render HTML
@@ -85,7 +89,9 @@ class WP_YTB_Shortcode {
         }
         ?>
         <div class="<?php echo esc_attr($container_classes); ?>" style="
-            --ytb-gap: <?php echo $gap; ?>px;
+            --ytb-gap-desk: <?php echo $gap_desk; ?>px;
+            --ytb-gap-tab: <?php echo $gap_tab; ?>px;
+            --ytb-gap-mob: <?php echo $gap_mob; ?>px;
             --ytb-radius: <?php echo $radius; ?>px;
             --ytb-title-size: <?php echo $title_size; ?>px;
             --ytb-title-weight: <?php echo $title_weight; ?>;
@@ -98,7 +104,7 @@ class WP_YTB_Shortcode {
             --ytb-col-tab: <?php echo $col_tab; ?>;
             --ytb-col-mob: <?php echo $col_mob; ?>;
         ">
-            <div class="wp-ytb-grid">
+            <div class="<?php echo esc_attr($grid_classes); ?>">
                 <?php foreach ( $videos as $video ) : ?>
                     <a href="<?php echo esc_url( $video['link'] ); ?>" target="_blank" rel="noopener noreferrer" class="wp-ytb-item">
                         <div class="wp-ytb-thumb">

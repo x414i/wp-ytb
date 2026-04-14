@@ -6,7 +6,9 @@
     font-family: var(--ytb-font-family, inherit) !important;
     box-sizing: border-box;
     /* Defaults in case inline variables are absent */
-    --ytb-gap: 24px;
+    --ytb-gap-desk: 24px;
+    --ytb-gap-tablet: 20px;
+    --ytb-gap-mobile: 15px;
     --ytb-radius: 12px;
     --ytb-title-size: 16px;
     --ytb-title-weight: 600;
@@ -23,8 +25,8 @@
 
 .wp-ytb-grid {
     display: grid !important;
-    grid-template-columns: repeat(var(--ytb-col-desk), 1fr) !important;
-    gap: calc(var(--ytb-gap) * 1px) !important;
+    grid-template-columns: repeat(var(--ytb-col-desk, 3), 1fr) !important;
+    gap: var(--ytb-gap-desk, 24px) !important;
     margin: 0 !important;
     padding: 0 !important;
 }
@@ -154,12 +156,14 @@
 /* Responsiveness based on variables */
 @media (max-width: 992px) {
     .wp-ytb-grid {
-        grid-template-columns: repeat(var(--ytb-col-tab), 1fr) !important;
+        grid-template-columns: repeat(var(--ytb-col-tab, 2), 1fr) !important;
+        gap: var(--ytb-gap-tablet, 20px) !important;
     }
 }
 
 @media (max-width: 576px) {
     .wp-ytb-grid {
-        grid-template-columns: repeat(var(--ytb-col-mob), 1fr) !important;
+        grid-template-columns: repeat(var(--ytb-col-mob, 1), 1fr) !important;
+        gap: var(--ytb-gap-mobile, 15px) !important;
     }
 }

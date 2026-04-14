@@ -56,7 +56,9 @@ class WP_YTB_Settings {
         register_setting( 'wp_ytb_layout_group', 'wp_ytb_col_desktop', 'absint' );
         register_setting( 'wp_ytb_layout_group', 'wp_ytb_col_tablet', 'absint' );
         register_setting( 'wp_ytb_layout_group', 'wp_ytb_col_mobile', 'absint' );
-        register_setting( 'wp_ytb_layout_group', 'wp_ytb_gap', 'sanitize_text_field' );
+        register_setting( 'wp_ytb_layout_group', 'wp_ytb_gap_desktop', 'sanitize_text_field' );
+        register_setting( 'wp_ytb_layout_group', 'wp_ytb_gap_tablet', 'sanitize_text_field' );
+        register_setting( 'wp_ytb_layout_group', 'wp_ytb_gap_mobile', 'sanitize_text_field' );
         register_setting( 'wp_ytb_layout_group', 'wp_ytb_border_radius', 'sanitize_text_field' );
         register_setting( 'wp_ytb_layout_group', 'wp_ytb_padding', 'sanitize_text_field' );
         register_setting( 'wp_ytb_layout_group', 'wp_ytb_margin', 'sanitize_text_field' );
@@ -83,7 +85,9 @@ class WP_YTB_Settings {
             'wp_ytb_col_desktop'   => 3,
             'wp_ytb_col_tablet'    => 2,
             'wp_ytb_col_mobile'    => 1,
-            'wp_ytb_gap'           => '24',
+            'wp_ytb_gap_desktop'   => '24',
+            'wp_ytb_gap_tablet'    => '20',
+            'wp_ytb_gap_mobile'    => '15',
             'wp_ytb_border_radius' => '12',
             'wp_ytb_padding'       => '0',
             'wp_ytb_margin'        => '20px 0',
@@ -187,8 +191,16 @@ class WP_YTB_Settings {
                                     <td><input type="number" id="wp_ytb_col_mobile" name="wp_ytb_col_mobile" value="<?php echo esc_attr( get_option( 'wp_ytb_col_mobile', 1 ) ); ?>" min="1" max="3" class="small-text" /></td>
                                 </tr>
                                 <tr valign="top">
-                                    <th scope="row">المسافة بين العناصر (Gap بـ px)</th>
-                                    <td><input type="number" id="wp_ytb_gap" name="wp_ytb_gap" value="<?php echo esc_attr( get_option( 'wp_ytb_gap', '24' ) ); ?>" class="small-text" /> px</td>
+                                    <th scope="row">المسافة بين العناصر (Desktop Gap)</th>
+                                    <td><input type="number" id="wp_ytb_gap_desktop" name="wp_ytb_gap_desktop" value="<?php echo esc_attr( get_option( 'wp_ytb_gap_desktop', '24' ) ); ?>" class="small-text" /> px</td>
+                                </tr>
+                                <tr valign="top">
+                                    <th scope="row">المسافة بين العناصر (Tablet Gap)</th>
+                                    <td><input type="number" id="wp_ytb_gap_tablet" name="wp_ytb_gap_tablet" value="<?php echo esc_attr( get_option( 'wp_ytb_gap_tablet', '20' ) ); ?>" class="small-text" /> px</td>
+                                </tr>
+                                <tr valign="top">
+                                    <th scope="row">المسافة بين العناصر (Mobile Gap)</th>
+                                    <td><input type="number" id="wp_ytb_gap_mobile" name="wp_ytb_gap_mobile" value="<?php echo esc_attr( get_option( 'wp_ytb_gap_mobile', '15' ) ); ?>" class="small-text" /> px</td>
                                 </tr>
                                 <tr valign="top">
                                     <th scope="row">نعومة الحواف (Border Radius بـ px)</th>
@@ -301,7 +313,9 @@ class WP_YTB_Settings {
                     <p style="font-size: 12px; color: #666; margin-bottom: 20px;">هذه المعاينة توضح التنسيقات والأبعاد المطبقة فوريا وفقا لإعداداتك واختياراتك.</p>
                     
                     <div id="ytb_preview_container" style="
-                        --ytb-gap: <?php echo esc_attr( get_option('wp_ytb_gap', '24') ); ?>px;
+                        --ytb-gap-desk: <?php echo esc_attr( get_option('wp_ytb_gap_desktop', '24') ); ?>px;
+                        --ytb-gap-tablet: <?php echo esc_attr( get_option('wp_ytb_gap_tablet', '20') ); ?>px;
+                        --ytb-gap-mobile: <?php echo esc_attr( get_option('wp_ytb_gap_mobile', '15') ); ?>px;
                         --ytb-radius: <?php echo esc_attr( get_option('wp_ytb_border_radius', '12') ); ?>px;
                         --ytb-title-size: <?php echo esc_attr( get_option('wp_ytb_title_size', '16') ); ?>px;
                         --ytb-title-weight: <?php echo esc_attr( get_option('wp_ytb_title_weight', '600') ); ?>;
@@ -362,7 +376,7 @@ class WP_YTB_Settings {
             const date = document.getElementById('ytb_preview_date');
             const icon = document.getElementById('ytb_preview_icon');
 
-            // Form inputs
+            const inputGapDesktop = document.getElementById('wp_ytb_gap_desktop');
             const inputRadius = document.getElementById('wp_ytb_border_radius');
             const inputTitleSize = document.getElementById('wp_ytb_title_size');
             const inputTitleWeight = document.getElementById('wp_ytb_title_weight');
@@ -374,6 +388,7 @@ class WP_YTB_Settings {
             const toggleDate = document.getElementById('wp_ytb_show_date');
             const toggleIcon = document.getElementById('wp_ytb_show_icon');
 
+            if(inputGapDesktop) inputGapDesktop.addEventListener('input', e => container.style.setProperty('--ytb-gap-desk', e.target.value + 'px'));
             if(inputRadius) inputRadius.addEventListener('input', e => container.style.setProperty('--ytb-radius', e.target.value + 'px'));
             if(inputTitleSize) inputTitleSize.addEventListener('input', e => container.style.setProperty('--ytb-title-size', e.target.value + 'px'));
             if(inputTitleWeight) inputTitleWeight.addEventListener('change', e => container.style.setProperty('--ytb-title-weight', e.target.value));
