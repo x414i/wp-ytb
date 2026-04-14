@@ -116,10 +116,22 @@ class WP_YTB_Feed {
 
             // Using media namespace
             $media = $entry->children('http://search.yahoo.com/mrss/');
+            
+            $video_link = (string) $entry->link['href'];
+            $video_id = '';
+            
+            // Extract video ID using namespace or fallback to regex on link
+            $yt = $entry->children('http://www.youtube.com/xml/schemas/2015');
+            if ( isset( $yt->videoId ) ) {
+                $video_id = (string) $yt->videoId;
+            } elseif ( preg_match( '/v=([^&]+)/', $video_link, $v_matches ) ) {
+                $video_id = $v_matches[1];
+            }
 
             $videos[] = [
                 'title'     => (string) $entry->title,
-                'link'      => (string) $entry->link['href'],
+                'link'      => $video_link,
+                'videoId'   => $video_id,
                 'published' => date_i18n( get_option('date_format'), strtotime( (string) $entry->published ) ),
                 'thumbnail' => isset($media->group->thumbnail[0]) ? (string) $media->group->thumbnail[0]['url'] : '',
             ];

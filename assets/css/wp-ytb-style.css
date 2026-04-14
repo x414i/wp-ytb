@@ -24,17 +24,20 @@
     border-radius: 12px;
     overflow: hidden;
     background: #fff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     color: inherit;
-    border: 1px solid rgba(0,0,0,0.03);
+    border: none;
+    position: relative;
+    z-index: 1;
 }
 
 .wp-ytb-item:hover,
 .wp-ytb-item:focus {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transform: scale(1.03) translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
     outline: none;
+    z-index: 2;
 }
 
 .wp-ytb-thumb {
@@ -50,11 +53,11 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.4s ease;
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .wp-ytb-item:hover .wp-ytb-thumb img {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
 .wp-ytb-play-icon {

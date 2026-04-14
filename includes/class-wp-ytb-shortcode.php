@@ -54,8 +54,19 @@ class WP_YTB_Shortcode {
                 <?php foreach ( $videos as $video ) : ?>
                     <a href="<?php echo esc_url( $video['link'] ); ?>" target="_blank" rel="noopener noreferrer" class="wp-ytb-item">
                         <div class="wp-ytb-thumb">
-                            <?php if ( ! empty( $video['thumbnail'] ) ) : ?>
-                                <img src="<?php echo esc_url( $video['thumbnail'] ); ?>" alt="<?php echo esc_attr( $video['title'] ); ?>" loading="lazy" />
+                            <?php 
+                                $img_src = '';
+                                $fallback_src = '';
+                                
+                                if ( ! empty( $video['videoId'] ) ) {
+                                    $img_src = 'https://i.ytimg.com/vi/' . $video['videoId'] . '/maxresdefault.jpg';
+                                    $fallback_src = 'https://i.ytimg.com/vi/' . $video['videoId'] . '/hqdefault.jpg';
+                                } elseif ( ! empty( $video['thumbnail'] ) ) {
+                                    $img_src = $video['thumbnail'];
+                                }
+                            ?>
+                            <?php if ( ! empty( $img_src ) ) : ?>
+                                <img src="<?php echo esc_url( $img_src ); ?>" <?php echo ( ! empty( $fallback_src ) ) ? 'onerror="this.onerror=null; this.src=\'' . esc_url( $fallback_src ) . '\';"' : ''; ?> alt="<?php echo esc_attr( $video['title'] ); ?>" loading="lazy" />
                             <?php endif; ?>
                             <div class="wp-ytb-play-icon">
                                 <svg viewBox="0 0 24 24" fill="currentColor">
