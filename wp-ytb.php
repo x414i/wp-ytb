@@ -3,7 +3,7 @@
  * Plugin Name: WP YouTube Latest
  * Plugin URI: https://github.com/x414i/wp-ytb
  * Description: Display the latest YouTube videos from any channel using RSS feed without API key. Small, agile, and cache-ready.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Mohammed Belaid
  * Author URI: https://github.com/x414i
  * Text Domain: wp-ytb
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define Plugin Constants
-define( 'WP_YTB_VERSION', '1.0.0' );
+define( 'WP_YTB_VERSION', '1.1.0' );
 define( 'WP_YTB_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WP_YTB_URL', plugin_dir_url( __FILE__ ) );
 
@@ -61,7 +61,7 @@ function wp_ytb_dashboard_widget_display() {
         <code style="background: #f0f0f1; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 8px;">[youtube_latest channel="@username" limit="3"]</code>
         
         <hr style="margin: 15px 0;">
-        <a href="<?php echo esc_url( admin_url( 'options-general.php?page=wp-ytb' ) ); ?>" class="button button-primary">الذهاب للإعدادات العامة</a>
+        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-ytb' ) ); ?>" class="button button-primary">الذهاب للإعدادات العامة</a>
     </div>
     <?php
 }

@@ -21,12 +21,14 @@ class WP_YTB_Settings {
     }
 
     public function add_admin_menu() {
-        add_options_page(
+        add_menu_page(
             __( 'WP YouTube Settings', 'wp-ytb' ),
             __( 'WP YouTube', 'wp-ytb' ),
             'manage_options',
             'wp-ytb',
-            [ $this, 'create_admin_page' ]
+            [ $this, 'create_admin_page' ],
+            'dashicons-video-alt3',
+            81
         );
     }
 
