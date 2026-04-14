@@ -17,6 +17,7 @@ class WP_YTB_Settings {
             'general'    => __( 'إعدادات عامة وتتحكم (General)', 'wp-ytb' ),
             'layout'     => __( 'تصميم الشبكة (Layout)', 'wp-ytb' ),
             'typography' => __( 'تخصيص النصوص (Typography)', 'wp-ytb' ),
+            'advanced'   => __( 'إعدادات متقدمة (Advanced)', 'wp-ytb' ),
             'guide'      => __( 'دليل الاستخدام', 'wp-ytb' )
         ];
     }
@@ -62,6 +63,10 @@ class WP_YTB_Settings {
         register_setting( 'wp_ytb_typography_group', 'wp_ytb_title_size', 'sanitize_text_field' );
         register_setting( 'wp_ytb_typography_group', 'wp_ytb_text_color', 'sanitize_hex_color' );
         register_setting( 'wp_ytb_typography_group', 'wp_ytb_title_weight', 'sanitize_text_field' );
+
+        // Advanced Group
+        register_setting( 'wp_ytb_advanced_group', 'wp_ytb_custom_class', 'sanitize_text_field' );
+        register_setting( 'wp_ytb_advanced_group', 'wp_ytb_custom_css', 'wp_strip_all_tags' );
         
         // Define Default values
         $defaults = [
@@ -205,6 +210,26 @@ class WP_YTB_Settings {
                                                 <option value="<?php echo esc_attr($val); ?>" <?php selected( get_option('wp_ytb_title_weight', '600'), $val ); ?>><?php echo esc_html($label); ?></option>
                                             <?php endforeach; ?>
                                         </select>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        <?php elseif ( $active_tab === 'advanced' ) : ?>
+                            <?php settings_fields( 'wp_ytb_advanced_group' ); ?>
+                            <h3>إعدادات متطورة (للمطورين)</h3>
+                            <table class="form-table">
+                                <tr valign="top">
+                                    <th scope="row">كلاسات CSS مخصصة (Custom Classes)</th>
+                                    <td>
+                                        <input type="text" id="wp_ytb_custom_class" name="wp_ytb_custom_class" value="<?php echo esc_attr( get_option( 'wp_ytb_custom_class', '' ) ); ?>" class="regular-text" placeholder="my-custom-grid featured-videos" />
+                                        <p class="description">سيتم دمج هذا الكلاس مع الحاوية الرئيسية `wp-ytb-container` لتمرير تنسيقات القالب الخاص بك.</p>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <th scope="row">صندوق CSS المخصص (Custom CSS Box)</th>
+                                    <td>
+                                        <textarea id="wp_ytb_custom_css" name="wp_ytb_custom_css" rows="6" class="large-text code" placeholder=".wp-ytb-item { border: 2px solid #ff0000; }"><?php echo esc_textarea( get_option( 'wp_ytb_custom_css', '' ) ); ?></textarea>
+                                        <p class="description">أضف كود CSS الخاص بك هنا. سيتم طباعته تلقائياً داخل الصفحة.</p>
                                     </td>
                                 </tr>
                             </table>

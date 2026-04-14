@@ -60,11 +60,24 @@ class WP_YTB_Shortcode {
         $show_date     = get_option('wp_ytb_show_date', 1);
         $show_icon     = get_option('wp_ytb_show_icon', 1);
         $enable_hover  = get_option('wp_ytb_enable_hover', 1);
+        
+        $custom_class  = esc_attr( get_option('wp_ytb_custom_class', '') );
+        $custom_css    = wp_strip_all_tags( get_option('wp_ytb_custom_css', '') );
 
-        $container_classes = 'wp-ytb-container wp-ytb-rtl' . ($enable_hover ? ' wp-ytb-hover-enabled' : '');
+        $container_classes = 'wp-ytb-container wp-ytb-rtl';
+        if ( $enable_hover ) {
+            $container_classes .= ' wp-ytb-hover-enabled';
+        }
+        if ( ! empty( $custom_class ) ) {
+            $container_classes .= ' ' . $custom_class;
+        }
 
         // Render HTML
         ob_start();
+        
+        if ( ! empty( $custom_css ) ) {
+            echo '<style>' . wp_strip_all_tags( $custom_css ) . '</style>';
+        }
         ?>
         <div class="<?php echo esc_attr($container_classes); ?>" style="
             --ytb-gap: <?php echo $gap; ?>px;

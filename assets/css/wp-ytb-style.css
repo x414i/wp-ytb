@@ -20,11 +20,11 @@
 }
 
 .wp-ytb-grid {
-    display: grid;
-    grid-template-columns: repeat(var(--ytb-col-desk), 1fr);
-    gap: calc(var(--ytb-gap) * 1px);
-    margin: 0;
-    padding: 0;
+    display: grid !important;
+    grid-template-columns: repeat(var(--ytb-col-desk), 1fr) !important;
+    gap: calc(var(--ytb-gap) * 1px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .wp-ytb-item {
@@ -152,12 +152,12 @@
 /* Responsiveness based on variables */
 @media (max-width: 992px) {
     .wp-ytb-grid {
-        grid-template-columns: repeat(var(--ytb-col-tab), 1fr);
+        grid-template-columns: repeat(var(--ytb-col-tab), 1fr) !important;
     }
 }
 
 @media (max-width: 576px) {
     .wp-ytb-grid {
-        grid-template-columns: repeat(var(--ytb-col-mob), 1fr);
+        grid-template-columns: repeat(var(--ytb-col-mob), 1fr) !important;
     }
 }
