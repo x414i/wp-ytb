@@ -1,8 +1,10 @@
 /* WP YouTube Latest - Modern Minimal CSS */
 .wp-ytb-container {
-    max-width: 100%;
-    margin: 20px 0;
-    font-family: inherit;
+    max-width: var(--ytb-max-width, 100%) !important;
+    margin: var(--ytb-margin, 20px 0) !important;
+    padding: var(--ytb-padding, 0) !important;
+    font-family: var(--ytb-font-family, inherit) !important;
+    box-sizing: border-box;
     /* Defaults in case inline variables are absent */
     --ytb-gap: 24px;
     --ytb-radius: 12px;

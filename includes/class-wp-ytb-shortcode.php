@@ -55,6 +55,11 @@ class WP_YTB_Shortcode {
         $col_desk      = absint( get_option('wp_ytb_col_desktop', 3) );
         $col_tab       = absint( get_option('wp_ytb_col_tablet', 2) );
         $col_mob       = absint( get_option('wp_ytb_col_mobile', 1) );
+        
+        $font_family   = esc_attr( get_option('wp_ytb_font_family', 'inherit') );
+        $padding       = esc_attr( get_option('wp_ytb_padding', '0') );
+        $margin        = esc_attr( get_option('wp_ytb_margin', '20px 0') );
+        $max_width     = esc_attr( get_option('wp_ytb_max_width', '100%') );
 
         $show_title    = get_option('wp_ytb_show_title', 1);
         $show_date     = get_option('wp_ytb_show_date', 1);
@@ -85,6 +90,10 @@ class WP_YTB_Shortcode {
             --ytb-title-size: <?php echo $title_size; ?>px;
             --ytb-title-weight: <?php echo $title_weight; ?>;
             --ytb-text-color: <?php echo $text_color; ?>;
+            --ytb-font-family: <?php echo $font_family; ?>;
+            --ytb-padding: <?php echo $padding; ?>;
+            --ytb-margin: <?php echo $margin; ?>;
+            --ytb-max-width: <?php echo $max_width; ?>;
             --ytb-col-desk: <?php echo $col_desk; ?>;
             --ytb-col-tab: <?php echo $col_tab; ?>;
             --ytb-col-mob: <?php echo $col_mob; ?>;
