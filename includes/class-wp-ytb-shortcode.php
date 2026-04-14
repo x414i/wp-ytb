@@ -46,10 +46,36 @@ class WP_YTB_Shortcode {
             return '<div class="wp-ytb-error">' . esc_html__( 'لا توجد فيديوهات أو تعذر جلبها.', 'wp-ytb' ) . '</div>';
         }
 
+        // Fetch settings for inline CSS & visibility
+        $gap           = esc_attr( get_option('wp_ytb_gap', '24') );
+        $radius        = esc_attr( get_option('wp_ytb_border_radius', '12') );
+        $title_size    = esc_attr( get_option('wp_ytb_title_size', '16') );
+        $title_weight  = esc_attr( get_option('wp_ytb_title_weight', '600') );
+        $text_color    = esc_attr( get_option('wp_ytb_text_color', '#202124') );
+        $col_desk      = absint( get_option('wp_ytb_col_desktop', 3) );
+        $col_tab       = absint( get_option('wp_ytb_col_tablet', 2) );
+        $col_mob       = absint( get_option('wp_ytb_col_mobile', 1) );
+
+        $show_title    = get_option('wp_ytb_show_title', 1);
+        $show_date     = get_option('wp_ytb_show_date', 1);
+        $show_icon     = get_option('wp_ytb_show_icon', 1);
+        $enable_hover  = get_option('wp_ytb_enable_hover', 1);
+
+        $container_classes = 'wp-ytb-container wp-ytb-rtl' . ($enable_hover ? ' wp-ytb-hover-enabled' : '');
+
         // Render HTML
         ob_start();
         ?>
-        <div class="wp-ytb-container wp-ytb-rtl">
+        <div class="<?php echo esc_attr($container_classes); ?>" style="
+            --ytb-gap: <?php echo $gap; ?>px;
+            --ytb-radius: <?php echo $radius; ?>px;
+            --ytb-title-size: <?php echo $title_size; ?>px;
+            --ytb-title-weight: <?php echo $title_weight; ?>;
+            --ytb-text-color: <?php echo $text_color; ?>;
+            --ytb-col-desk: <?php echo $col_desk; ?>;
+            --ytb-col-tab: <?php echo $col_tab; ?>;
+            --ytb-col-mob: <?php echo $col_mob; ?>;
+        ">
             <div class="wp-ytb-grid">
                 <?php foreach ( $videos as $video ) : ?>
                     <a href="<?php echo esc_url( $video['link'] ); ?>" target="_blank" rel="noopener noreferrer" class="wp-ytb-item">
@@ -68,16 +94,27 @@ class WP_YTB_Shortcode {
                             <?php if ( ! empty( $img_src ) ) : ?>
                                 <img src="<?php echo esc_url( $img_src ); ?>" <?php echo ( ! empty( $fallback_src ) ) ? 'onerror="this.onerror=null; this.src=\'' . esc_url( $fallback_src ) . '\';"' : ''; ?> alt="<?php echo esc_attr( $video['title'] ); ?>" loading="lazy" />
                             <?php endif; ?>
+                            
+                            <?php if ( $show_icon ) : ?>
                             <div class="wp-ytb-play-icon">
                                 <svg viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M8 5v14l11-7z"/>
                                 </svg>
                             </div>
+                            <?php endif; ?>
                         </div>
+                        
+                        <?php if ( $show_title || $show_date ) : ?>
                         <div class="wp-ytb-content">
+                            <?php if ( $show_title ) : ?>
                             <h3 class="wp-ytb-title" title="<?php echo esc_attr( $video['title'] ); ?>"><?php echo esc_html( $video['title'] ); ?></h3>
+                            <?php endif; ?>
+                            
+                            <?php if ( $show_date ) : ?>
                             <span class="wp-ytb-date"><?php echo esc_html( $video['published'] ); ?></span>
+                            <?php endif; ?>
                         </div>
+                        <?php endif; ?>
                     </a>
                 <?php endforeach; ?>
             </div>
