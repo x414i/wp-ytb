@@ -58,11 +58,15 @@ class WP_YTB_Settings {
         register_setting( 'wp_ytb_layout_group', 'wp_ytb_col_mobile', 'absint' );
         register_setting( 'wp_ytb_layout_group', 'wp_ytb_gap', 'sanitize_text_field' );
         register_setting( 'wp_ytb_layout_group', 'wp_ytb_border_radius', 'sanitize_text_field' );
+        register_setting( 'wp_ytb_layout_group', 'wp_ytb_padding', 'sanitize_text_field' );
+        register_setting( 'wp_ytb_layout_group', 'wp_ytb_margin', 'sanitize_text_field' );
+        register_setting( 'wp_ytb_layout_group', 'wp_ytb_max_width', 'sanitize_text_field' );
 
         // Typography Group
         register_setting( 'wp_ytb_typography_group', 'wp_ytb_title_size', 'sanitize_text_field' );
         register_setting( 'wp_ytb_typography_group', 'wp_ytb_text_color', 'sanitize_hex_color' );
         register_setting( 'wp_ytb_typography_group', 'wp_ytb_title_weight', 'sanitize_text_field' );
+        register_setting( 'wp_ytb_typography_group', 'wp_ytb_font_family', 'sanitize_text_field' );
 
         // Advanced Group
         register_setting( 'wp_ytb_advanced_group', 'wp_ytb_custom_class', 'sanitize_text_field' );
@@ -81,9 +85,13 @@ class WP_YTB_Settings {
             'wp_ytb_col_mobile'    => 1,
             'wp_ytb_gap'           => '24',
             'wp_ytb_border_radius' => '12',
+            'wp_ytb_padding'       => '0',
+            'wp_ytb_margin'        => '20px 0',
+            'wp_ytb_max_width'     => '100%',
             'wp_ytb_title_size'    => '16',
             'wp_ytb_text_color'    => '#202124',
-            'wp_ytb_title_weight'  => '600'
+            'wp_ytb_title_weight'  => '600',
+            'wp_ytb_font_family'   => 'inherit'
         ];
 
         foreach ($defaults as $opt => $val) {
@@ -186,12 +194,38 @@ class WP_YTB_Settings {
                                     <th scope="row">نعومة الحواف (Border Radius بـ px)</th>
                                     <td><input type="number" id="wp_ytb_border_radius" name="wp_ytb_border_radius" value="<?php echo esc_attr( get_option( 'wp_ytb_border_radius', '12' ) ); ?>" class="small-text" /> px</td>
                                 </tr>
+                                <tr valign="top">
+                                    <th scope="row">الهوامش الخارجية (Margin)</th>
+                                    <td>
+                                        <input type="text" id="wp_ytb_margin" name="wp_ytb_margin" value="<?php echo esc_attr( get_option( 'wp_ytb_margin', '20px 0' ) ); ?>" class="regular-text" />
+                                        <p class="description">مثل: `20px` لجميع الجهات أو `20px 0` للأعلى والأسفل.</p>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <th scope="row">الهوامش الداخلية (Padding)</th>
+                                    <td>
+                                        <input type="text" id="wp_ytb_padding" name="wp_ytb_padding" value="<?php echo esc_attr( get_option( 'wp_ytb_padding', '0' ) ); ?>" class="regular-text" />
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <th scope="row">أقصى عرض للحاوية (Max Width)</th>
+                                    <td>
+                                        <input type="text" id="wp_ytb_max_width" name="wp_ytb_max_width" value="<?php echo esc_attr( get_option( 'wp_ytb_max_width', '100%' ) ); ?>" class="regular-text" />
+                                    </td>
+                                </tr>
                             </table>
 
                         <?php elseif ( $active_tab === 'typography' ) : ?>
                             <?php settings_fields( 'wp_ytb_typography_group' ); ?>
                             <h3>تخصيص النصوص والخطوط</h3>
                             <table class="form-table">
+                                <tr valign="top">
+                                    <th scope="row">نوع الخط (Font Family)</th>
+                                    <td>
+                                        <input type="text" id="wp_ytb_font_family" name="wp_ytb_font_family" value="<?php echo esc_attr( get_option( 'wp_ytb_font_family', 'inherit' ) ); ?>" class="regular-text" placeholder="مثال: Cairo, Arial, sans-serif" />
+                                        <p class="description">اتركه `inherit` ليأخذ خط القالب الافتراضي.</p>
+                                    </td>
+                                </tr>
                                 <tr valign="top">
                                     <th scope="row">لون النص الأساسي</th>
                                     <td>
@@ -272,6 +306,12 @@ class WP_YTB_Settings {
                         --ytb-title-size: <?php echo esc_attr( get_option('wp_ytb_title_size', '16') ); ?>px;
                         --ytb-title-weight: <?php echo esc_attr( get_option('wp_ytb_title_weight', '600') ); ?>;
                         --ytb-text-color: <?php echo esc_attr( get_option('wp_ytb_text_color', '#202124') ); ?>;
+                        --ytb-font-family: <?php echo esc_attr( get_option('wp_ytb_font_family', 'inherit') ); ?>;
+                        --ytb-padding: <?php echo esc_attr( get_option('wp_ytb_padding', '0') ); ?>;
+                        /* Mock the container width to 100% inside preview instead of respecting max-width, or just apply it */
+                        max-width: <?php echo esc_attr( get_option('wp_ytb_max_width', '100%') ); ?>;
+                        font-family: var(--ytb-font-family);
+                        padding: var(--ytb-padding);
                     ">
                         
                         <!-- Mock Card -->
@@ -327,6 +367,9 @@ class WP_YTB_Settings {
             const inputTitleSize = document.getElementById('wp_ytb_title_size');
             const inputTitleWeight = document.getElementById('wp_ytb_title_weight');
             const inputTextColor = document.getElementById('wp_ytb_text_color');
+            const inputFontFamily = document.getElementById('wp_ytb_font_family');
+            const inputPadding = document.getElementById('wp_ytb_padding');
+            const inputMaxWidth = document.getElementById('wp_ytb_max_width');
             const toggleTitle = document.getElementById('wp_ytb_show_title');
             const toggleDate = document.getElementById('wp_ytb_show_date');
             const toggleIcon = document.getElementById('wp_ytb_show_icon');
@@ -335,6 +378,9 @@ class WP_YTB_Settings {
             if(inputTitleSize) inputTitleSize.addEventListener('input', e => container.style.setProperty('--ytb-title-size', e.target.value + 'px'));
             if(inputTitleWeight) inputTitleWeight.addEventListener('change', e => container.style.setProperty('--ytb-title-weight', e.target.value));
             if(inputTextColor) inputTextColor.addEventListener('input', e => container.style.setProperty('--ytb-text-color', e.target.value));
+            if(inputFontFamily) inputFontFamily.addEventListener('input', e => container.style.setProperty('--ytb-font-family', e.target.value));
+            if(inputPadding) inputPadding.addEventListener('input', e => container.style.setProperty('--ytb-padding', e.target.value));
+            if(inputMaxWidth) inputMaxWidth.addEventListener('input', e => container.style.maxWidth = e.target.value);
             
             if(toggleTitle) toggleTitle.addEventListener('change', e => title.style.display = e.target.checked ? 'block' : 'none');
             if(toggleDate) toggleDate.addEventListener('change', e => date.style.display = e.target.checked ? 'block' : 'none');
