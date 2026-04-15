@@ -22,6 +22,7 @@ class WP_YTB_Shortcode {
 
     public function render_shortcode( $atts ) {
         // Parse attributes
+        $atts = shortcode_atts( [
             'channel'  => get_option( 'wp_ytb_channel_input', '' ),
             'limit'    => get_option( 'wp_ytb_default_limit', 6 ),
             'template' => get_option( 'wp_ytb_template', 'card' ),
