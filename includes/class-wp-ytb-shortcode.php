@@ -23,8 +23,9 @@ class WP_YTB_Shortcode {
     public function render_shortcode( $atts ) {
         // Parse attributes
         $atts = shortcode_atts( [
-            'channel' => get_option( 'wp_ytb_channel_input', '' ),
-            'limit'   => get_option( 'wp_ytb_default_limit', 6 ),
+            'channel'  => get_option( 'wp_ytb_channel_input', '' ),
+            'limit'    => get_option( 'wp_ytb_default_limit', 6 ),
+            'template' => get_option( 'wp_ytb_template', 'card' ),
         ], $atts, 'youtube_latest' );
 
         $channel_input = sanitize_text_field( $atts['channel'] );
@@ -53,10 +54,17 @@ class WP_YTB_Shortcode {
         $radius        = esc_attr( get_option('wp_ytb_border_radius', '12') );
         $title_size    = esc_attr( get_option('wp_ytb_title_size', '16') );
         $title_weight  = esc_attr( get_option('wp_ytb_title_weight', '600') );
-        $text_color    = esc_attr( get_option('wp_ytb_text_color', '#202124') );
+        $title_color   = esc_attr( get_option('wp_ytb_title_color', '#202124') );
+        $date_color    = esc_attr( get_option('wp_ytb_date_color', '#5f6368') );
+        $card_bg       = esc_attr( get_option('wp_ytb_card_bg', '#ffffff') );
+        $content_bg    = esc_attr( get_option('wp_ytb_content_bg', 'transparent') );
+        $icon_bg       = esc_attr( get_option('wp_ytb_icon_bg', 'rgba(0,0,0,0.6)') );
+        $icon_color    = esc_attr( get_option('wp_ytb_icon_color', '#ffffff') );
+
         $col_desk      = absint( get_option('wp_ytb_col_desktop', 3) );
         $col_tab       = absint( get_option('wp_ytb_col_tablet', 2) );
         $col_mob       = absint( get_option('wp_ytb_col_mobile', 1) );
+        $template      = sanitize_text_field( $atts['template'] );
         
         $font_family   = esc_attr( get_option('wp_ytb_font_family', 'inherit') );
         $padding       = esc_attr( get_option('wp_ytb_padding', '0') );
@@ -71,7 +79,7 @@ class WP_YTB_Shortcode {
         $custom_class  = esc_attr( get_option('wp_ytb_custom_class', '') );
         $custom_css    = wp_strip_all_tags( get_option('wp_ytb_custom_css', '') );
 
-        $container_classes = 'wp-ytb-container wp-ytb-rtl';
+        $container_classes = 'wp-ytb-container wp-ytb-rtl wp-ytb-template-' . $template;
         if ( $enable_hover ) {
             $container_classes .= ' wp-ytb-hover-enabled';
         }
@@ -95,7 +103,12 @@ class WP_YTB_Shortcode {
             --ytb-radius: <?php echo $radius; ?>px;
             --ytb-title-size: <?php echo $title_size; ?>px;
             --ytb-title-weight: <?php echo $title_weight; ?>;
-            --ytb-text-color: <?php echo $text_color; ?>;
+            --ytb-title-color: <?php echo $title_color; ?>;
+            --ytb-date-color: <?php echo $date_color; ?>;
+            --ytb-card-bg: <?php echo $card_bg; ?>;
+            --ytb-content-bg: <?php echo $content_bg; ?>;
+            --ytb-icon-bg: <?php echo $icon_bg; ?>;
+            --ytb-icon-color: <?php echo $icon_color; ?>;
             --ytb-font-family: <?php echo $font_family; ?>;
             --ytb-padding: <?php echo $padding; ?>;
             --ytb-margin: <?php echo $margin; ?>;

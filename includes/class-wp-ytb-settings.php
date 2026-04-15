@@ -73,6 +73,15 @@ class WP_YTB_Settings {
         // Advanced Group
         register_setting( 'wp_ytb_advanced_group', 'wp_ytb_custom_class', 'sanitize_text_field' );
         register_setting( 'wp_ytb_advanced_group', 'wp_ytb_custom_css', 'wp_strip_all_tags' );
+
+        // Template & Branding
+        register_setting( 'wp_ytb_layout_group', 'wp_ytb_template', 'sanitize_text_field' );
+        register_setting( 'wp_ytb_typography_group', 'wp_ytb_card_bg', 'sanitize_hex_color' );
+        register_setting( 'wp_ytb_typography_group', 'wp_ytb_content_bg', 'sanitize_hex_color' );
+        register_setting( 'wp_ytb_typography_group', 'wp_ytb_title_color', 'sanitize_hex_color' );
+        register_setting( 'wp_ytb_typography_group', 'wp_ytb_date_color', 'sanitize_hex_color' );
+        register_setting( 'wp_ytb_typography_group', 'wp_ytb_icon_bg', 'sanitize_hex_color' );
+        register_setting( 'wp_ytb_typography_group', 'wp_ytb_icon_color', 'sanitize_hex_color' );
         
         // Define Default values
         $defaults = [
@@ -95,7 +104,14 @@ class WP_YTB_Settings {
             'wp_ytb_title_size'    => '16',
             'wp_ytb_text_color'    => '#202124',
             'wp_ytb_title_weight'  => '600',
-            'wp_ytb_font_family'   => 'inherit'
+            'wp_ytb_font_family'   => 'inherit',
+            'wp_ytb_template'      => 'card',
+            'wp_ytb_card_bg'       => '#ffffff',
+            'wp_ytb_content_bg'    => 'transparent',
+            'wp_ytb_title_color'   => '#202124',
+            'wp_ytb_date_color'    => '#5f6368',
+            'wp_ytb_icon_bg'       => 'rgba(0,0,0,0.6)',
+            'wp_ytb_icon_color'    => '#ffffff'
         ];
 
         foreach ($defaults as $opt => $val) {
@@ -176,8 +192,18 @@ class WP_YTB_Settings {
 
                         <?php elseif ( $active_tab === 'layout' ) : ?>
                             <?php settings_fields( 'wp_ytb_layout_group' ); ?>
-                            <h3>تخطيط الشبكة (Grid Layout)</h3>
+                            <h3>تخطيط الشبقة والنموذج (Grid & Template)</h3>
                             <table class="form-table">
+                                <tr valign="top">
+                                    <th scope="row">نموذج العرض (Template)</th>
+                                    <td>
+                                        <select id="wp_ytb_template" name="wp_ytb_template">
+                                            <option value="card" <?php selected( get_option('wp_ytb_template', 'card'), 'card' ); ?>>نموذج البطاقة (Standard Card)</option>
+                                            <option value="list" <?php selected( get_option('wp_ytb_template', 'card'), 'list' ); ?>>نموذج القائمة (Modern List)</option>
+                                            <option value="overlay" <?php selected( get_option('wp_ytb_template', 'card'), 'overlay' ); ?>>نموذج التراكب (Overlay Card)</option>
+                                        </select>
+                                    </td>
+                                </tr>
                                 <tr valign="top">
                                     <th scope="row">مدة الأعمدة - أجهزة كمبيوتر</th>
                                     <td><input type="number" id="wp_ytb_col_desktop" name="wp_ytb_col_desktop" value="<?php echo esc_attr( get_option( 'wp_ytb_col_desktop', 3 ) ); ?>" min="1" max="6" class="small-text" /></td>
@@ -239,9 +265,36 @@ class WP_YTB_Settings {
                                     </td>
                                 </tr>
                                 <tr valign="top">
-                                    <th scope="row">لون النص الأساسي</th>
+                                    <th scope="row">لون النص الأساسي (العناوين)</th>
                                     <td>
-                                        <input type="color" id="wp_ytb_text_color" name="wp_ytb_text_color" value="<?php echo esc_attr( get_option( 'wp_ytb_text_color', '#202124' ) ); ?>" />
+                                        <input type="color" id="wp_ytb_title_color" name="wp_ytb_title_color" value="<?php echo esc_attr( get_option( 'wp_ytb_title_color', '#202124' ) ); ?>" />
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <th scope="row">لون التاريخ</th>
+                                    <td>
+                                        <input type="color" id="wp_ytb_date_color" name="wp_ytb_date_color" value="<?php echo esc_attr( get_option( 'wp_ytb_date_color', '#5f6368' ) ); ?>" />
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <th scope="row">خلفية البطاقة (Card BG)</th>
+                                    <td>
+                                        <input type="color" id="wp_ytb_card_bg" name="wp_ytb_card_bg" value="<?php echo esc_attr( get_option( 'wp_ytb_card_bg', '#ffffff' ) ); ?>" />
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <th scope="row">خلفية المحتوى (Content BG)</th>
+                                    <td>
+                                        <input type="color" id="wp_ytb_content_bg" name="wp_ytb_content_bg" value="<?php echo esc_attr( get_option( 'wp_ytb_content_bg', 'transparent' ) ); ?>" />
+                                        <p class="description">مفيد في حالة أردت تمييز منطقة النص بلون مختلف.</p>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <th scope="row">أيقونة التشغيل (Icon Colors)</th>
+                                    <td>
+                                        اللون: <input type="color" id="wp_ytb_icon_color" name="wp_ytb_icon_color" value="<?php echo esc_attr( get_option( 'wp_ytb_icon_color', '#ffffff' ) ); ?>" />
+                                        الخلفية: <input type="text" id="wp_ytb_icon_bg" name="wp_ytb_icon_bg" value="<?php echo esc_attr( get_option( 'wp_ytb_icon_bg', 'rgba(0,0,0,0.6)' ) ); ?>" class="small-text" />
+                                        <p class="description">يمكنك استخدام rgba للشفافية في الخلفية.</p>
                                     </td>
                                 </tr>
                                 <tr valign="top">
@@ -312,50 +365,57 @@ class WP_YTB_Settings {
                     <h3><span class="dashicons dashicons-visibility"></span> معاينة حية للطريقة العرض (Live Preview)</h3>
                     <p style="font-size: 12px; color: #666; margin-bottom: 20px;">هذه المعاينة توضح التنسيقات والأبعاد المطبقة فوريا وفقا لإعداداتك واختياراتك.</p>
                     
-                    <div id="ytb_preview_container" style="
+                    <div id="ytb_preview_container" class="<?php echo 'wp-ytb-template-' . esc_attr( get_option('wp_ytb_template', 'card') ); ?>" style="
                         --ytb-gap-desk: <?php echo esc_attr( get_option('wp_ytb_gap_desktop', '24') ); ?>px;
                         --ytb-gap-tablet: <?php echo esc_attr( get_option('wp_ytb_gap_tablet', '20') ); ?>px;
                         --ytb-gap-mobile: <?php echo esc_attr( get_option('wp_ytb_gap_mobile', '15') ); ?>px;
                         --ytb-radius: <?php echo esc_attr( get_option('wp_ytb_border_radius', '12') ); ?>px;
                         --ytb-title-size: <?php echo esc_attr( get_option('wp_ytb_title_size', '16') ); ?>px;
                         --ytb-title-weight: <?php echo esc_attr( get_option('wp_ytb_title_weight', '600') ); ?>;
-                        --ytb-text-color: <?php echo esc_attr( get_option('wp_ytb_text_color', '#202124') ); ?>;
+                        --ytb-title-color: <?php echo esc_attr( get_option('wp_ytb_title_color', '#202124') ); ?>;
+                        --ytb-date-color: <?php echo esc_attr( get_option('wp_ytb_date_color', '#5f6368') ); ?>;
+                        --ytb-card-bg: <?php echo esc_attr( get_option('wp_ytb_card_bg', '#ffffff') ); ?>;
+                        --ytb-content-bg: <?php echo esc_attr( get_option('wp_ytb_content_bg', 'transparent') ); ?>;
+                        --ytb-icon-bg: <?php echo esc_attr( get_option('wp_ytb_icon_bg', 'rgba(0,0,0,0.6)') ); ?>;
+                        --ytb-icon-color: <?php echo esc_attr( get_option('wp_ytb_icon_color', '#ffffff') ); ?>;
                         --ytb-font-family: <?php echo esc_attr( get_option('wp_ytb_font_family', 'inherit') ); ?>;
                         --ytb-padding: <?php echo esc_attr( get_option('wp_ytb_padding', '0') ); ?>;
-                        /* Mock the container width to 100% inside preview instead of respecting max-width, or just apply it */
                         max-width: <?php echo esc_attr( get_option('wp_ytb_max_width', '100%') ); ?>;
                         font-family: var(--ytb-font-family);
                         padding: var(--ytb-padding);
                     ">
                         
                         <!-- Mock Card -->
-                        <div id="ytb_preview_card" style="
-                            background: #fff;
+                        <div id="ytb_preview_card" class="wp-ytb-item" style="
+                            background: var(--ytb-card-bg);
                             border-radius: var(--ytb-radius);
                             box-shadow: 0 4px 20px rgba(0,0,0,0.08); /* Mock base shadow */
                             overflow: hidden;
                             position: relative;
                             transition: all 0.4s ease;
+                            display: flex;
+                            flex-direction: column;
                         ">
-                            <div style="width: 100%; aspect-ratio: 16/9; background: #ddd; position: relative;">
-                                <div id="ytb_preview_icon" style="
+                            <div class="wp-ytb-thumb" style="width: 100%; aspect-ratio: 16/9; background: #ddd; position: relative;">
+                                <div id="ytb_preview_icon" class="wp-ytb-play-icon" style="
                                     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-                                    width: 48px; height: 48px; background: rgba(0,0,0,0.6); border-radius: 50%;
+                                    width: 48px; height: 48px; background: var(--ytb-icon-bg); border-radius: 50%;
                                     display: <?php echo get_option('wp_ytb_show_icon', 1) ? 'flex' : 'none'; ?>; align-items: center; justify-content: center;
+                                    color: var(--ytb-icon-color);
                                 ">
-                                    <svg viewBox="0 0 24 24" fill="#fff" style="width: 24px; height: 24px; margin-left: 3px;"><path d="M8 5v14l11-7z"/></svg>
+                                    <svg viewBox="0 0 24 24" fill="currentColor" style="width: 24px; height: 24px;"><path d="M8 5v14l11-7z"/></svg>
                                 </div>
                             </div>
-                            <div style="padding: 16px;">
-                                <h4 id="ytb_preview_title" style="
+                            <div class="wp-ytb-content" style="padding: 16px; background: var(--ytb-content-bg);">
+                                <h4 id="ytb_preview_title" class="wp-ytb-title" style="
                                     margin: 0 0 8px 0;
-                                    color: var(--ytb-text-color);
+                                    color: var(--ytb-title-color);
                                     font-size: var(--ytb-title-size);
                                     font-weight: var(--ytb-title-weight);
                                     display: <?php echo get_option('wp_ytb_show_title', 1) ? 'block' : 'none'; ?>;
                                 ">مثال على عنوان الفيديو المعروض</h4>
-                                <span id="ytb_preview_date" style="
-                                    font-size: 13px; color: #5f6368;
+                                <span id="ytb_preview_date" class="wp-ytb-date" style="
+                                    font-size: 13px; color: var(--ytb-date-color);
                                     display: <?php echo get_option('wp_ytb_show_date', 1) ? 'block' : 'none'; ?>;
                                 ">12 نوفمبر 2026</span>
                             </div>
@@ -380,7 +440,13 @@ class WP_YTB_Settings {
             const inputRadius = document.getElementById('wp_ytb_border_radius');
             const inputTitleSize = document.getElementById('wp_ytb_title_size');
             const inputTitleWeight = document.getElementById('wp_ytb_title_weight');
-            const inputTextColor = document.getElementById('wp_ytb_text_color');
+            const inputTitleColor = document.getElementById('wp_ytb_title_color');
+            const inputDateColor = document.getElementById('wp_ytb_date_color');
+            const inputCardBg = document.getElementById('wp_ytb_card_bg');
+            const inputContentBg = document.getElementById('wp_ytb_content_bg');
+            const inputIconColor = document.getElementById('wp_ytb_icon_color');
+            const inputIconBg = document.getElementById('wp_ytb_icon_bg');
+            const selectTemplate = document.getElementById('wp_ytb_template');
             const inputFontFamily = document.getElementById('wp_ytb_font_family');
             const inputPadding = document.getElementById('wp_ytb_padding');
             const inputMaxWidth = document.getElementById('wp_ytb_max_width');
@@ -392,7 +458,18 @@ class WP_YTB_Settings {
             if(inputRadius) inputRadius.addEventListener('input', e => container.style.setProperty('--ytb-radius', e.target.value + 'px'));
             if(inputTitleSize) inputTitleSize.addEventListener('input', e => container.style.setProperty('--ytb-title-size', e.target.value + 'px'));
             if(inputTitleWeight) inputTitleWeight.addEventListener('change', e => container.style.setProperty('--ytb-title-weight', e.target.value));
-            if(inputTextColor) inputTextColor.addEventListener('input', e => container.style.setProperty('--ytb-text-color', e.target.value));
+            
+            if(inputTitleColor) inputTitleColor.addEventListener('input', e => container.style.setProperty('--ytb-title-color', e.target.value));
+            if(inputDateColor) inputDateColor.addEventListener('input', e => container.style.setProperty('--ytb-date-color', e.target.value));
+            if(inputCardBg) inputCardBg.addEventListener('input', e => container.style.setProperty('--ytb-card-bg', e.target.value));
+            if(inputContentBg) inputContentBg.addEventListener('input', e => container.style.setProperty('--ytb-content-bg', e.target.value));
+            if(inputIconColor) inputIconColor.addEventListener('input', e => container.style.setProperty('--ytb-icon-color', e.target.value));
+            if(inputIconBg) inputIconBg.addEventListener('input', e => container.style.setProperty('--ytb-icon-bg', e.target.value));
+            
+            if(selectTemplate) selectTemplate.addEventListener('change', e => {
+                container.className = 'wp-ytb-template-' + e.target.value;
+            });
+
             if(inputFontFamily) inputFontFamily.addEventListener('input', e => container.style.setProperty('--ytb-font-family', e.target.value));
             if(inputPadding) inputPadding.addEventListener('input', e => container.style.setProperty('--ytb-padding', e.target.value));
             if(inputMaxWidth) inputMaxWidth.addEventListener('input', e => container.style.maxWidth = e.target.value);
